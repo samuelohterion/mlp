@@ -1,0 +1,113 @@
+<!DOCTYPE = HTML>
+<html>
+	<head>
+		<style>
+		</style>
+		<title>
+			dummy
+		</title>
+		<script src="so.alg.js" type="text/javascript">
+		</script>
+	</script>
+	</head>
+	<body>
+		<script type="text/javascript">
+
+			function pr ( p_text ) {
+
+				console.log ( p_text );
+			}
+
+			var
+			T_ = true;
+
+			pr ( SO.add( 1, 2 ) );
+			pr ( SO.add( 1, 2, T_ ) );
+			pr ( SO.add( [ 1, 2 ], 3 ) );
+			pr ( SO.add( [ 1, 2 ], 3, T_ ) );
+			pr ( SO.add( 1, [ 2, 3 ] ) );
+			pr ( SO.add( 1, [ 2, 3 ], T_ ) );
+			pr ( SO.add( [ 1, 2 ], [ 3, 4, 5 ] ) );
+			pr ( SO.add( [ 1, 2 ], [ 3, 4, 5 ], T_ ) );
+			pr ( SO.add( [ 1, 2, 3 ], [ 4, 5 ] ) );
+			pr ( SO.add( [ 1, 2, 3 ], [ 4, 5 ], T_ ) );
+			pr ( SO.add( [ [ 1, 2, 3 ], [ 4, 5, 6 ] ], 7 ) );
+			pr ( SO.add( [ [ 1, 2, 3 ], [ 4, 5, 6 ] ], 7, T_ ) );
+			pr ( SO.add( [ [ 1, 2, 3 ], 4 ], [ 5, 6 ] ) );
+			pr ( SO.add( [ [ 1, 2, 3 ], 4 ], [ 5, 6 ], T_ ) );
+			pr ( SO.add( [ 1, 2 ], [ 5, 6 ] ) );
+			pr ( SO.add( [ 1, 2 ], [ 5, 6 ], T_ ) );
+			pr ( SO.sub( [ 1, 2 ], [ 5, 6 ] ) );
+			pr ( SO.sub( [ 1, 2 ], [ 5, 6 ], T_ ) );
+			pr ( SO.bfct ( [ "a", "b", "c" ], [ "A", "B", "C", "D" ], function ( a, b ) { return a + b } ) );
+			pr ( SO.bfct ( [ "a", "b", "c" ], [ "A", "B", "C", "D" ], function ( a, b ) { return a + " x " + b }, T_ ) );
+			pr ( SO.cpy( [ 1, 2 ] ) );
+			pr ( SO.sum( [ [ 1, 2, 3, 4 ], [ 5, 6 ] ] ) );
+			pr ( SO.prod( [ [ 1, 2, 3, 4 ], [ 6, 7 ], [ [ 8, 9 ], 10 ] ] ) );
+			pr ( SO.sum( [ [ 1, 2, 3, 4 ], [ 6, 7 ], [ [ 8, 9 ], 10 ] ] ) );
+			pr ( SO.sum( [ [ "a", "b", "c", "d" ], [ "E", "F" ], [ [ "G", "H" ], "I" ] ] ) );
+			pr ( SO.omul( [ 1, 2 ], [ 5, [ 6, 7 ] ] ) );
+			pr ( SO.oadd( [ "a", "b", "c", "d" ], [ [ "E", "F" ], [ "G", "H" ] ] ) );
+
+			function print ( p_val ) {
+
+				var
+				r = "";
+
+				return SO.cfct( p_val, function ( a, b ) { return a + ", " + b } );
+			}
+
+			pr ( print( [ 1, 2, 3, [ 4, 5 ], 6, [ [ [ 7, 8 ], [ 9, 10 ] ], 11 ] ] ) );
+			pr ( print( SO.oadd( [ "a", "b", "c", "d" ], [ [ "E", "F" ], [ "G", "H" ] ] ) ) );
+			pr ( print( SO.omul( [ 1, 2 ], [ 5, [ 6, 7 ] ] ) ) );
+
+
+
+			var
+			alpha = .25 * Math.PI,
+			ca = Math.cos ( alpha ),
+			sa = Math.sin ( alpha ),
+			x  = [ 1, 0, 0 ],
+			y  = [ 0, 1, 0 ],
+			z  = [ 0, 0, 1 ],
+			I  = [ x, y, z ],
+			Rx = [ [ 1, 0, 0 ], [ 0, ca, -sa ], [ 0, sa, ca ] ],
+			Rz = [ [ ca, -sa, 0 ], [ sa, ca, 0 ], [ 0, 0, 1 ] ],
+			I2 = [
+				[ SO.sum( SO.mul ( Rx[ 0 ], I[ 0 ] ) ), SO.sum( SO.mul ( Rx[ 1 ], I[ 0 ] ) ), SO.sum( SO.mul ( Rx[ 2 ], I[ 0 ] ) ) ],
+				[ SO.sum( SO.mul ( Rx[ 0 ], I[ 1 ] ) ), SO.sum( SO.mul ( Rx[ 1 ], I[ 1 ] ) ), SO.sum( SO.mul ( Rx[ 2 ], I[ 1 ] ) ) ],
+				[ SO.sum( SO.mul ( Rx[ 0 ], I[ 2 ] ) ), SO.sum( SO.mul ( Rx[ 1 ], I[ 2 ] ) ), SO.sum( SO.mul ( Rx[ 2 ], I[ 2 ] ) ) ] ];
+
+			pr( I2 );
+			pr( print( I2 ) );
+
+			var
+			u = SO.seq( 0, 3, function ( a ) { return a; } ),
+			v = SO.seq( 1, 5, function ( a ) { return
+				SO.seq( 1, 5, function ( b ) { return a * b; } ) } );
+
+			pr ( u );
+			pr ( v );
+
+			pr ( print( u ) );
+			pr ( print( v ) );
+
+			function ufctIdentity ( a ) {
+
+				return a;
+			}
+
+			function bftcProd ( a, b ) {
+
+				return a * b;
+			}
+
+			function arrSeq ( a, b, bfct ) {
+
+				return	SO.seq( 1, 5,  a * b; } );
+			}
+
+
+		</script>
+	</body>
+</html>

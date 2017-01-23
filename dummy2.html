@@ -1,0 +1,89 @@
+<!DOCTYPE = HTML>
+<html>
+	<head>
+		<style>
+		</style>
+		<title>
+			dummy
+		</title>
+		<script src="algebra.js" type="text/javascript">
+		</script>
+	</script>
+	</head>
+	<body>
+		<script type="text/javascript">
+
+			function pr ( p_text ) {
+
+				console.log ( p_text );
+			}
+
+			function idx ( a ) {
+
+				return a;
+			}
+
+			function rnd ( a ) {
+
+				return Math.random ( );
+			}
+
+			function add ( a, b ) {
+
+				return a + b;
+			}
+
+			function sub ( a, b ) {
+
+				return a - b;
+			}
+
+			function mul ( a, b ) {
+
+				return a * b;
+			}
+
+			function div ( a, b ) {
+
+				return a / b;
+			}
+
+			function pwr ( a, b ) {
+
+				return Math.pow ( a, b );
+			}
+
+			function cpy ( a, b ) {
+
+				return b;
+			}
+
+
+			var
+			u = arr ( 3, cpy, 10 ),	// 10, 10, 10
+			v = arr ( 3, idx ), 	// 0, 1, 2
+			w = arr ( 3, rnd ),     // .221, .3234, .924
+			m = arr( 3,	function( i ) { return arr( 3, function( j ) { return i + j; } ); } ); // 1 0 0  0 1 0  0 0 1
+
+			pr ( u );
+			pr ( v );
+			pr ( w );
+			pr ( m );
+
+			w = ball ( u, v, pwr );		// 1, 10, 100
+			pr ( w );
+
+			pr ( ball ( u, w, add ) );	// 11, 20, 110
+
+			pr ( call ( w, add ) / w.length ); 		// < w > = ( 1 + 10 + 100 ) / 3 = 37
+
+			pr ( call ( ball( u, v, mul ), add ) );	// < u, v >
+
+			pr( arr( 3, function ( i, M ) { return call ( ball( M[ i ], v, mul ), add ) }, m ) );	// M | v >
+
+
+
+
+		</script>
+	</body>
+</html>
