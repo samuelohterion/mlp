@@ -28,17 +28,22 @@
 				return Math.random ( );
 			}
 
-			function add ( a, b ) {
+			function sum ( a, b ) {
 
 				return a + b;
 			}
 
-			function sub ( a, b ) {
+			function plus ( a, b ) {
+
+				return a + b;
+			}
+
+			function minus ( a, b ) {
 
 				return a - b;
 			}
 
-			function mul ( a, b ) {
+			function times ( a, b ) {
 
 				return a * b;
 			}
@@ -48,7 +53,7 @@
 				return a / b;
 			}
 
-			function pwr ( a, b ) {
+			function tothe ( a, b ) {
 
 				return Math.pow ( a, b );
 			}
@@ -58,28 +63,67 @@
 				return b;
 			}
 
-
 			var
-			u = arr ( 3, cpy, 10 ),	// 10, 10, 10
-			v = arr ( 3, idx ), 	// 0, 1, 2
-			w = arr ( 3, rnd ),     // .221, .3234, .924
-			m = arr( 3,	function( i ) { return arr( 3, function( j ) { return i + j; } ); } ); // 1 0 0  0 1 0  0 0 1
+			u = arr ( cpy, 3, 10 ),	// 10, 10, 10
+			v = arr ( idx, 3 ), 	// 0, 1, 2
+			w = arr ( rnd, 3 ),		// .221, .3234, .924
+			m = arr(
+				function( i ) {
+					return arr(
+						function( j ) {
+							return i + j;
+						},
+						3
+					);
+				},
+				3
+			);	// [ [ 0 1 2 ], [ 1 2 3 ], [ 2 3 4 ] ]
 
 			pr ( u );
 			pr ( v );
 			pr ( w );
 			pr ( m );
 
-			w = ball ( u, v, pwr );		// 1, 10, 100
+			w = ball ( u, tothe, v );	// 1, 10, 100
 			pr ( w );
 
-			pr ( ball ( u, w, add ) );	// 11, 20, 110
+			pr ( ball ( u, plus, w ) );	// 11, 20, 110
 
-			pr ( call ( w, add ) / w.length ); 		// < w > = ( 1 + 10 + 100 ) / 3 = 37
+			pr ( call ( sum, w ) / w.length ); 		// < w > = ( 1 + 10 + 100 ) / 3 = 37
 
-			pr ( call ( ball( u, v, mul ), add ) );	// < u, v >
+			pr ( call ( sum, ball( u, times, v ) ) );	// < u | v >
 
-			pr( arr( 3, function ( i, M ) { return call ( ball( M[ i ], v, mul ), add ) }, m ) );	// M | v >
+			pr(
+				arr(
+					function ( i, M, V ) {
+						return call (
+							sum,
+							ball(
+								M[ i ],
+								times,
+								V
+							)
+						)
+					},
+					3,
+					m,
+					v
+				)
+			);	// M | v >
+
+			var
+			s = [ 1, -1, -1, 1 ],
+			o = [ [ 1, 1, 1, 1 ], [ 1, 1, -1, -1 ], [ 1, -1, -1, 1 ], [ 1, -1, 1, -1 ] ];
+
+			pr ( s );
+			pr ( o );
+
+			function MxV( p_m, p_v ) {
+
+				return arr( function ( i, m, v ) { return call ( sum, ball( m[ i ], times, v ) ) }, 4, p_m, p_v );
+			}
+
+			pr( MxV ( o, s ) );
 
 
 

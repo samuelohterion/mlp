@@ -1,4 +1,4 @@
-function arr ( pI_size, p_fct, p_arg0, p_arg1, p_arg2 ) {
+function arr ( p_fct, pI_size, p_arg0, p_arg1, p_arg2 ) {
 
 	var
 	r = [ ];
@@ -10,7 +10,7 @@ function arr ( pI_size, p_fct, p_arg0, p_arg1, p_arg2 ) {
 	return r;
 }
 
-function ball ( p_arrLhs, p_arrRhs, p_fct, p_arg0, p_arg1, p_arg2 ) {
+function ball ( p_arrLhs, p_fct, p_arrRhs, p_arg0, p_arg1, p_arg2 ) {
 
 	var
 	r = [ ];
@@ -22,19 +22,7 @@ function ball ( p_arrLhs, p_arrRhs, p_fct, p_arg0, p_arg1, p_arg2 ) {
 	return r;
 }
 
-function balls ( p_arrLhs, p_arrRhs, p_fct, p_arg0, p_arg1, p_arg2 ) {
-
-	var
-	r = [ ];
-
-	for ( var i = 0; i < p_arrLhs.length; ++i )
-
-		p_arrLhs[ i ] = p_fct ( p_arrLhs[ i ], p_arrRhs[ i ], p_arg0, p_arg1, p_arg2 );
-
-	return r;
-}
-
-function call ( p_arr, p_fct, p_arg0, p_arg1, p_arg2 ) {
+function call ( p_fct, p_arr, p_arg0, p_arg1, p_arg2 ) {
 
 	var
 	c = p_arr[ 0 ];
@@ -46,7 +34,7 @@ function call ( p_arr, p_fct, p_arg0, p_arg1, p_arg2 ) {
 	return c;
 }
 
-function fall ( p_arr, p_fct, p_arg0, p_arg1, p_arg2 ) {
+function fall ( p_fct, p_arr, p_arg0, p_arg1, p_arg2 ) {
 
 	var
 	r = [ ];
