@@ -33,17 +33,12 @@
 				return a + b;
 			}
 
-			function plus ( a, b ) {
-
-				return a + b;
-			}
-
 			function minus ( a, b ) {
 
 				return a - b;
 			}
 
-			function times ( a, b ) {
+			function prdct ( a, b ) {
 
 				return a * b;
 			}
@@ -53,7 +48,7 @@
 				return a / b;
 			}
 
-			function tothe ( a, b ) {
+			function pwr ( a, b ) {
 
 				return Math.pow ( a, b );
 			}
@@ -84,14 +79,14 @@
 			pr ( w );
 			pr ( m );
 
-			w = ball ( u, tothe, v );	// 1, 10, 100
+			w = ball ( pwr, u, v );	// 1, 10, 100
 			pr ( w );
 
-			pr ( ball ( u, plus, w ) );	// 11, 20, 110
+			pr ( ball ( sum, u, w ) );	// 11, 20, 110
 
 			pr ( call ( sum, w ) / w.length ); 		// < w > = ( 1 + 10 + 100 ) / 3 = 37
 
-			pr ( call ( sum, ball( u, times, v ) ) );	// < u | v >
+			pr ( call ( sum, ball( prdct, u, v ) ) );	// < u | v >
 
 			pr(
 				arr(
@@ -99,8 +94,8 @@
 						return call (
 							sum,
 							ball(
+								prdct,
 								M[ i ],
-								times,
 								V
 							)
 						)
@@ -120,13 +115,10 @@
 
 			function MxV( p_m, p_v ) {
 
-				return arr( function ( i, m, v ) { return call ( sum, ball( m[ i ], times, v ) ) }, 4, p_m, p_v );
+				return arr( function ( i, m, v ) { return call ( sum, ball( prdct, m[ i ], v ) ) }, 4, p_m, p_v );
 			}
 
 			pr( MxV ( o, s ) );
-
-
-
 
 		</script>
 	</body>
