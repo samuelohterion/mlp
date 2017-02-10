@@ -39,7 +39,8 @@
 			pr ( SO.add( [ 1, 2 ], [ 5, 6 ], T_ ) );
 			pr ( SO.sub( [ 1, 2 ], [ 5, 6 ] ) );
 			pr ( SO.sub( [ 1, 2 ], [ 5, 6 ], T_ ) );
-			pr ( SO.bfct ( [ "a", "b", "c" ], [ "A", "B", "C", "D" ], function ( a, b ) { return a + b } ) );
+			pr ( SO.add ( [ "a", "b", "c" ], [ "A", "B", "C", "D" ] ) );
+			pr ( SO.add ( [ "a", "b", "c" ], [ "A", "B", "C", "D" ], T_ ) );
 			pr ( SO.bfct ( [ "a", "b", "c" ], [ "A", "B", "C", "D" ], function ( a, b ) { return a + " x " + b }, T_ ) );
 			pr ( SO.cpy( [ 1, 2 ] ) );
 			pr ( SO.sum( [ [ 1, 2, 3, 4 ], [ 5, 6 ] ] ) );
@@ -83,8 +84,8 @@
 
 			var
 			u = SO.seq( 0, 3, function ( a ) { return a; } ),
-			v = SO.seq( 1, 5, function ( a ) { return
-				SO.seq( 1, 5, function ( b ) { return a * b; } ) } );
+			v = SO.seq( 1, 5, function ( a ) {
+					return SO.seq( 1, 5, function ( b ) { return a * b; } ) } );
 
 			pr ( u );
 			pr ( v );
@@ -104,7 +105,7 @@
 
 			function arrSeq ( a, b, bfct ) {
 
-				return	SO.seq( 1, 5,  a * b; } );
+				return	SO.seq( 1, 5,  a * b );
 			}
 
 

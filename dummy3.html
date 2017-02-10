@@ -4,7 +4,7 @@
 		<style>
 		</style>
 		<title>
-			dummy
+			mlp logical
 		</title>
 		<script src="fun.js" type="text/javascript">
 		</script>
@@ -13,22 +13,185 @@
 	<body>
 		<script type="text/javascript">
 
-			function pr ( p_text ) {
+			function pr ( p_text ) { console.log ( p_text ); }
 
-				console.log ( p_text );
+			function all0 ( pFct_fct, pI_len, pA_dst ) { for ( var i = 0; i < pI_len; ++i )  pA_dst[ i ] = pFct_fct( pA_dst[ i ] ); }
+
+			function all1 ( pFct_fct, pI_len, pA_dst, pA_src ) { for ( var i = 0; i < pI_len; ++i ) pA_dst[ i ] = pFct_fct( pA_dst[ i ], pA_src[ i ] ); }
+
+			function all2 ( pFct_fct, pI_len, pA_dst, pA_src1, pA_src2 ) { for ( var i = 0; i < pI_len; ++i )  pA_dst[ i ] = pFct_fct( pA_dst[ i ], pA_src1[ i ], pA_src2[ i ] ); }
+
+			function cum1 ( pFct_fct, pI_len, pA_src ) { var dst = 0; for ( var i = 0; i < pI_len; ++i ) dst = pFct_fct( dst, pA_src[ i ] ); return dst; }
+
+			function cum2 ( pFct_fct, pI_len, pA_src1, pA_src2 ) { var dst = 0; for ( var i = 0; i < pI_len; ++i ) dst = pFct_fct( dst, pA_src1[ i ], pA_src2[ i ] ); return dst; }
+
+			function set ( a, b ) { return b }
+
+			function add ( a, b, c ) { return b + c }
+
+			function cumProd ( a, b, c ) { return a += ( b * c ); }
+
+			function sub ( a, b, c ) { return b - c }
+
+			function mul ( a, b, c ) { return b * c }
+
+			function cpy ( pA_dst, pA_src, pI_len = pA_src.length ) { all1 ( set, pI_len, pA_dst, pA_src ) }
+
+			function sp ( pA_src1, pA_src2 ) { return cum2( cumProd, pA_src1.length, pA_src1, pA_src2 ); }
+
+			function vec ( p_fct, p_rows, p_arg1, p_arg2 ) {
+
+				var
+				rt = [ ];
+
+				for ( var r = 0; r < p_rows; ++r )
+
+					rt.push ( p_fct( p_arg1, p_arg2 ) );
+
+				return rt;
+			}
+
+			function mat ( p_fct, p_rows, p_cols, p_arg1, p_arg2 ) {
+
+				var
+				rt = [ ];
+
+				for ( var r = 0; r < p_rows; ++r ) {
+
+					rt.push ( [ ] );
+
+					for ( var c = 0; c < p_cols; ++c ) {
+
+						rt[ r ].push ( p_fct( p_arg1, p_arg2 ) );
+					}
+				}
+
+				return rt;
+			}
+
+			function nop ( ) { }
+
+			function rnd ( pD_min = -1, pD_max = 1 ) { var rng = pD_max - pD_min; return pD_min + rng * Math.random( ); }
+
+			function MLP ( pAI_sizes = [ 2, 3, 1 ], pD_min = 0, pD_max = 1, pD_eta = .1 ) {
+
+				this.szs = [ ];
+				this.min = 0;
+				this.max = 0;
+				this.rng = 0;
+				this.eta = 0;
+
+				this.o = [ ];
+				this.d = [ ];
+				this.n = [ ];
+				this.w = [ ];
+
+				var
+				create = function(  pAI_sizes = [ 2, 3, 1 ], pD_min = 0, pD_max = 1, pD_eta = .1 ) {
+
+					this.szs = pAI_sizes.slice( 0 );
+					this.min = pD_min;
+					this.max = pD_max;
+					this.rng = pD_max - pD_min;
+					this.eta = pD_eta;
+
+					this.o = [ ];
+					this.d = [ ];
+					this.n = [ ];
+					this.w = [ ];
+
+					var
+					l = 0;
+
+					this.o.push ( vec ( set, this.szs[ 0 ] + 1, 1, 1 ) );
+					this.d.push ( vec ( nop, 0, 0 ) );
+					this.n.push ( vec ( nop, 0, 0 ) );
+
+					while ( ++l < this.szs.length - 1 ) {
+
+						this.o.push ( vec ( set, this.szs[ l ] + 1, 1, 1 ) );
+						this.d.push ( vec ( set, this.szs[ l ] + 1, 0, 0 ) );
+						this.n.push ( vec ( set, this.szs[ l ] + 1, 0, 0 ) );
+					}
+
+					this.o.push ( vec ( set, this.szs[ l ], 1, 1 ) );
+					this.d.push ( vec ( set, this.szs[ l ], 0, 0 ) );
+					this.n.push ( vec ( set, this.szs[ l ], 0, 0 ) );
+
+					l = -1;
+
+					while ( ++l < this.szs.length - 1 ) {
+
+						this.w.push ( mat ( rnd, this.szs[ l + 1 ], this.szs[ l ] + 1, this.min, this.max ) );
+					}
+				}
+
+				this.remember = function ( pAD_pattern ) {
+
+					cpy ( this.o[ 0 ], pAD_pattern );
+
+					var
+					lf = 0,
+					lt = 1;
+
+					while ( lt < this.szs.length ) {
+
+						for ( var nt = 0; nt < this.szs[ lt ]; ++nt ) {
+
+							this.n[ lt ][ nt ] = sp( this.o[ lf ], this.w[ lf ][ nt ] );
+						}
+
+						lf = lt++;
+					}
+
+					return this.o[ this.o.length - 1 ];
+				}
+
+				this.create ( pAI_sizes, pD_min, pD_max, pD_eta );
 			}
 
 			var
-			args = {
+			mlp = new MLP ( [ 2, 4, 16 ], 0, 1, .05 );
 
-				fct : function ( a ) { var s = 0; for ( var i = 0; i < rgs.length; ++i ) { s += rgs[ i ]; } return s; },
-				rgs : [ 2, 5 ]
-			},
+			pr ( mlp );
 
+			var
+			p = [
+				[ 0, 0 ],
+				[ 0, 1 ],
+				[ 1, 0 ],
+				[ 1, 1 ]
+			],
+			t = [
+				[ 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1 ],
+				[ 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1 ],
+				[ 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1 ],
+				[ 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1 ]
+			],
+			y = [
+				[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+				[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+				[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+				[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
+			],
+			e = [
+				[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+				[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+				[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+				[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
+			];
 
-			aPlusB = new Fct ( args );
+			for ( var i = 0; i < p.length; ++i ) {
 
-			pr ( aPlusB );
+				y[ i ] = mlp.remember( p[ i	] );
+
+				all2 ( sub, e[ i ].length, e[ i ], t[ i ], y[ i ] );
+			}
+
+			pr ( p );
+			pr ( y );
+			pr ( t );
+			pr ( e );
 
 		</script>
 	</body>

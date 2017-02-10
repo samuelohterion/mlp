@@ -107,18 +107,31 @@
 			);	// M | v >
 
 			var
-			s = [ 1, -1, -1, 1 ],
-			o = [ [ 1, 1, 1, 1 ], [ 1, 1, -1, -1 ], [ 1, -1, -1, 1 ], [ 1, -1, 1, -1 ] ];
+			s = [ 1, -1, -1 ],
+			t = [ 1, -1, -1, 1 ],
+			o = [ [ 1, 1, 1, 1 ], [ 1, 1, -1, -1 ], [ 1, -1, -1, 1 ] ],
+			p = [ [ 1, 1, 1 ], [ 1, 1, -1 ], [ 1, -1, -1 ], [ 1, -1, -1 ] ];
 
 			pr ( s );
+			pr ( t );
 			pr ( o );
+			pr ( p );
 
 			function MxV( p_m, p_v ) {
 
-				return arr( function ( i, m, v ) { return call ( sum, ball( prdct, m[ i ], v ) ) }, 4, p_m, p_v );
+				return arr( function ( i, p_m, p_v ) { return call ( sum, ball( prdct, p_m[ i ], p_v ) ) }, p_v.length, p_m, p_v );
 			}
 
 			pr( MxV ( o, s ) );
+			pr( MxV ( o, t ) );
+
+			function MxM( p_m1, p_m2 ) {
+
+				return arr( function ( j ) { return MxV ( p_m1, p_m2[ j ] ); }, p_m1.length );
+			}
+
+			pr( MxM ( o, p ) );
+			pr( MxM ( p, o ) );
 
 		</script>
 	</body>

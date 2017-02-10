@@ -1,0 +1,55 @@
+<!DOCTYPE = HTML>
+<html>
+	<head>
+		<style>
+		</style>
+		<title>
+			dummy
+		</title>
+		<script src="arr.js" type="text/javascript">
+		</script>
+	</script>
+	</head>
+	<body>
+		<script type="text/javascript">
+
+			function pr ( p_text ) { console.log ( p_text ); }
+
+			var
+
+			u = arr ( [ 4 ], function ( i ) { return i[ 0 ] + i[ 0 ]; } ),
+			v = arr ( [ 3 ], function ( i ) { return i[ 0 ] * i[ 0 ]; } ),
+			m = arr ( [ 4, 3 ], function ( i ) { return i[ 0 ] + i[ 1 ]; } ),
+			t = arr (
+
+				[ 2, 30, 30 ],
+				function ( i ) {
+
+					return -2. * ( i[ 0 ] - .5 ) *
+					Math.cos( 3.14 * i[ 1 ] / 30 ) *
+					Math.sin( 3.14 * i[ 2 ] / 30 );
+				}
+			),
+			e = arr (
+
+				[ 3, 3, 3 ],
+				function ( i ) {
+
+					return	( i[ 0 ] == 0 && i[ 1 ] == 1 && i[ 2 ] == 2 ) -
+							( i[ 0 ] == 0 && i[ 1 ] == 2 && i[ 2 ] == 1 ) +
+							( i[ 0 ] == 1 && i[ 1 ] == 2 && i[ 2 ] == 0 ) -
+							( i[ 0 ] == 1 && i[ 1 ] == 0 && i[ 2 ] == 2 ) +
+							( i[ 0 ] == 2 && i[ 1 ] == 0 && i[ 2 ] == 1 ) -
+							( i[ 0 ] == 2 && i[ 1 ] == 1 && i[ 2 ] == 0 );
+				}
+			);
+
+			pr ( u );
+			pr ( v );
+			pr ( m );
+			pr ( t );
+			pr ( e );
+
+		</script>
+	</body>
+</html>
