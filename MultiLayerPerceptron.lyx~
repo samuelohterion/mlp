@@ -1,0 +1,261 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass amsart
+\use_default_options true
+\begin_modules
+theorems-ams
+eqs-within-sections
+figs-within-sections
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Multilayer-Perceptron
+\end_layout
+
+\begin_layout Part
+Notation
+\end_layout
+
+\begin_layout Section
+Layers
+\end_layout
+
+\begin_layout Subsection
+\begin_inset Formula $L$
+\end_inset
+
+ ...
+ number of layers:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+L & \in & 2+\mathbb{N}_{\text{0}}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Neurons
+\end_layout
+
+\begin_layout Subsection
+\begin_inset Formula $N_{l}$
+\end_inset
+
+ ...
+ number of neurons in layer 
+\begin_inset Formula $l$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+N & = & \begin{pmatrix}N_{1}\\
+\vdots\\
+N_{L}
+\end{pmatrix}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+\begin_inset Formula $o_{n}^{l}$
+\end_inset
+
+ ...
+ output of neuron 
+\begin_inset Formula $n$
+\end_inset
+
+ in layer 
+\begin_inset Formula $l$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+o^{l} & = & \begin{pmatrix}o_{1}^{l}\\
+\vdots\\
+o_{N_{l}}
+\end{pmatrix}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Weights
+\end_layout
+
+\begin_layout Subsection
+\begin_inset Formula $_{l}w_{t}^{f}$
+\end_inset
+
+ ...
+ weight from neuron 
+\begin_inset Formula $f$
+\end_inset
+
+ in layer 
+\begin_inset Formula $l$
+\end_inset
+
+ to neuron 
+\begin_inset Formula $t$
+\end_inset
+
+ in layer 
+\begin_inset Formula $l+1$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+w & = & \begin{pmatrix}\begin{pmatrix}_{1}w_{1}^{1} & \cdots & _{1}w_{1}^{N_{f}}\\
+\vdots & \diagdown & \vdots\\
+_{1}w_{N_{t}}^{1} & \cdots & _{1}w_{N_{t}}^{N_{f}}
+\end{pmatrix} & \cdots & \begin{pmatrix}_{L-1}w_{1}^{1} & \cdots & _{L-1}w_{1}^{N_{f}}\\
+\vdots & \diagdown & \vdots\\
+_{L-1}w_{N_{t}}^{1} & \cdots & _{L-1}w_{N_{t}}^{N_{f}}
+\end{pmatrix}\end{pmatrix}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Net sum
+\end_layout
+
+\begin_layout Subsection
+\begin_inset Formula $s_{n}^{l+1}$
+\end_inset
+
+ ...
+ net sum of neuron 
+\begin_inset Formula $n$
+\end_inset
+
+ in layer 
+\begin_inset Formula $l+1$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+s_{n}^{l+1} & = & _{l}w_{n}^{f}\,o_{f}^{l}\\
+s_{n}^{l+1} & = & _{l}w_{n}\,o^{l}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part
+Delta-Rule
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+E & = & \sum_{}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
