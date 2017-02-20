@@ -95,6 +95,10 @@ Layers
 \end_layout
 
 \begin_layout Standard
+A MLP contains of L layers.
+\end_layout
+
+\begin_layout Standard
 \begin_inset Formula 
 \begin{eqnarray*}
 L & \in & 2+\mathbb{N}_{\text{0}}
@@ -109,8 +113,27 @@ L & \in & 2+\mathbb{N}_{\text{0}}
 Neurons
 \end_layout
 
+\begin_layout Standard
+Every layer of a MLP contains a certain amount of neurons.
+ 
+\begin_inset Formula $\widetilde{N}$
+\end_inset
+
+ is a vector which elements gives the count of the neurons in every layer.
+ So 
+\begin_inset Formula $_{1}\widetilde{N}$
+\end_inset
+
+ is the number of input neurons or neurons in the first ( the input ) layer.
+ 
+\begin_inset Formula $_{L}\widetilde{N}$
+\end_inset
+
+ is the number of the neurons in the output layer, the last one, of course.
+\end_layout
+
 \begin_layout Subsection
-\begin_inset Formula $\widetilde{N}_{l}$
+\begin_inset Formula $\widetilde{N}$
 \end_inset
 
  ...
@@ -124,9 +147,9 @@ Neurons
 \begin_layout Standard
 \begin_inset Formula 
 \begin{eqnarray*}
-\widetilde{N} & = & \begin{pmatrix}\widetilde{N}_{1}\\
+\widetilde{N} & = & \begin{pmatrix}_{1}\widetilde{N}\\
 \vdots\\
-\widetilde{N}_{L}
+_{L}\widetilde{N}
 \end{pmatrix}
 \end{eqnarray*}
 
@@ -136,7 +159,7 @@ Neurons
 \end_layout
 
 \begin_layout Subsection
-\begin_inset Formula $N_{l}$
+\begin_inset Formula $N$
 \end_inset
 
  ...
@@ -148,16 +171,28 @@ Neurons
 \end_layout
 
 \begin_layout Standard
-Every layer except of the output layer gets an additional on-neuron.
+These numbers are model numbers and only by design.
+ Every layer except of the output layer gets an additional on-neuron.
+ So the real numbers of neurons for implementation are then a vector called
+ 
+\begin_inset Formula $N$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
 \begin_inset Formula 
 \begin{eqnarray*}
-N_{i} & = & \begin{cases}
-\widetilde{N}_{i}+1 & 1\le i<L\\
-\widetilde{N}_{i} & L
-\end{cases}
+_{l}N & = & \begin{cases}
+_{l}\widetilde{N}+1 & 1\le l<L\\
+_{l}\widetilde{N} & L
+\end{cases}\\
+N & = & \widetilde{N}+\begin{pmatrix}1\\
+\vdots\\
+1\\
+0
+\end{pmatrix}
 \end{eqnarray*}
 
 \end_inset
@@ -166,15 +201,11 @@ N_{i} & = & \begin{cases}
 \end_layout
 
 \begin_layout Subsection
-\begin_inset Formula $o_{n}^{l}$
+\begin_inset Formula $_{l}o$
 \end_inset
 
  ...
- output of neuron 
-\begin_inset Formula $n$
-\end_inset
-
- in layer 
+ output of neurons in layer 
 \begin_inset Formula $l$
 \end_inset
 
@@ -184,10 +215,17 @@ N_{i} & = & \begin{cases}
 \begin_layout Standard
 \begin_inset Formula 
 \begin{eqnarray*}
-o^{l} & = & \begin{pmatrix}o_{1}^{l}\\
+_{l}o & = & \begin{pmatrix}_{l}o_{1}\\
 \vdots\\
-o_{N_{l}}
-\end{pmatrix}
+_{l}o_{\left(_{l}N\right)}
+\end{pmatrix}\\
+o & = & \left(\begin{pmatrix}_{1}o_{1}\\
+\vdots\\
+_{1}o_{\left(_{1}N\right)}
+\end{pmatrix},\cdots,\begin{pmatrix}_{L}o_{1}\\
+\vdots\\
+_{L}o_{\left(_{L}N\right)}
+\end{pmatrix}\right)
 \end{eqnarray*}
 
 \end_inset
@@ -226,12 +264,12 @@ Weights
 \begin_layout Standard
 \begin_inset Formula 
 \begin{eqnarray*}
-w & = & \begin{pmatrix}\begin{pmatrix}_{1}w_{1}^{1} & \cdots & _{1}w_{1}^{N_{f}}\\
+w & = & \begin{pmatrix}\begin{pmatrix}_{1}w_{1}^{1} & \cdots & _{1}w_{1}^{\left(_{1}N\right)}\\
 \vdots & \diagdown & \vdots\\
-_{1}w_{N_{t}}^{1} & \cdots & _{1}w_{N_{t}}^{N_{f}}
-\end{pmatrix} & \cdots & \begin{pmatrix}_{L-1}w_{1}^{1} & \cdots & _{L-1}w_{1}^{N_{f}}\\
+_{1}w_{\left(_{2}N\right)}^{1} & \cdots & _{1}w_{\left(_{2}N\right)}^{\left(_{1}N\right)}
+\end{pmatrix} & \cdots & \begin{pmatrix}_{\left(L-1\right)}w_{1}^{1} & \cdots & _{\left(L-1\right)}w_{1}^{\left(_{\left(L-1\right)}N\right)}\\
 \vdots & \diagdown & \vdots\\
-_{L-1}w_{N_{t}}^{1} & \cdots & _{L-1}w_{N_{t}}^{N_{f}}
+_{\left(L-1\right)}w_{\left(_{L}N\right)}^{1} & \cdots & _{\left(L-1\right)}w_{\left(_{L}N\right)}^{\left(_{\left(L-1\right)}N\right)}
 \end{pmatrix}\end{pmatrix}
 \end{eqnarray*}
 
@@ -245,12 +283,12 @@ Net sum
 \end_layout
 
 \begin_layout Subsection
-\begin_inset Formula $s_{n}^{l+1}$
+\begin_inset Formula $_{l+1}s_{t}$
 \end_inset
 
  ...
  net sum of neuron 
-\begin_inset Formula $n$
+\begin_inset Formula $t$
 \end_inset
 
  in layer 
@@ -261,10 +299,65 @@ Net sum
 \end_layout
 
 \begin_layout Standard
+For every neuron except the neurons in the input layer a net sum has to
+ be calculated by the weights and the outputs of the neurons in the layer
+ below.
+\end_layout
+
+\begin_layout Standard
 \begin_inset Formula 
 \begin{eqnarray*}
-s_{n}^{l+1} & = & _{l}w_{n}^{f}\,o_{f}^{l}\\
-s_{n}^{l+1} & = & _{l}w_{n}\,o^{l}
+_{l+1}s_{t} & = & _{l}w_{t}^{f}\,_{l}o_{f}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note!
+\end_layout
+
+\begin_layout Standard
+If an index appears twice one right hand of the equation but not on the
+ left hand then einstein sum is applied.
+ So here it's not applied for 
+\begin_inset Formula $l$
+\end_inset
+
+ and 
+\begin_inset Formula $t$
+\end_inset
+
+ but for 
+\begin_inset Formula $f$
+\end_inset
+
+.
+ In this case on can write it:
+\begin_inset Formula 
+\begin{eqnarray*}
+_{l+1}s_{t} & = & _{l}w_{t}\,_{l}o
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and finally for all sums in the layer 
+\begin_inset Formula $l+1$
+\end_inset
+
+ as a vector:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+_{l+1}s & = & _{l}w\,_{l}o
 \end{eqnarray*}
 
 \end_inset
@@ -277,17 +370,35 @@ s_{n}^{l+1} & = & _{l}w_{n}\,o^{l}
 \end_inset
 
  ...
- activation function:
+ the activation function as a modified sigmoid function 
+\begin_inset Formula $sig\left(s\right)$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Subsubsection
+\begin_inset Formula $min$
+\end_inset
+
+, 
+\begin_inset Formula $max$
+\end_inset
+
+, 
+\begin_inset Formula $rng$
+\end_inset
+
+ ...
+ the range for the input output signals.
 \end_layout
 
 \begin_layout Standard
 \begin_inset Formula 
 \begin{eqnarray*}
-a\left(s\right) & = & \frac{1}{1+e^{-s}}\\
-a\left(s\right)+e^{-s}a\left(s\right) & = & 1\\
-a\left(s\right)-1 & = & -e^{-s}a\left(s\right)\\
--e^{-s} & = & \frac{a\left(s\right)-1}{a\left(s\right)}\\
- & = & 1-\frac{1}{a\left(s\right)}
+\left\{ min,max,rng\right\}  & \in & \mathbb{R}\\
+min & < & max\\
+rng & = & max-min
 \end{eqnarray*}
 
 \end_inset
@@ -295,21 +406,110 @@ a\left(s\right)-1 & = & -e^{-s}a\left(s\right)\\
 
 \end_layout
 
-\begin_layout Subsection
-\begin_inset Formula $a'\left(s\right)$
+\begin_layout Standard
+In most cases one will use 
+\begin_inset Formula $max=1$
+\end_inset
+
+ and 
+\begin_inset Formula $min=-1$
+\end_inset
+
+ or 
+\begin_inset Formula $min=0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+\begin_inset Formula $sig\left(s\right)$
 \end_inset
 
  ...
- derivation of activation function:
+ the sigmoid function:
 \end_layout
 
 \begin_layout Standard
 \begin_inset Formula 
 \begin{eqnarray*}
-a'\left(s\right) & = & \frac{-e^{-s}}{\left(1+e^{-s}\right)^{2}}\\
- & = & \frac{-e^{-s}}{\left(1+e^{-s}\right)^{2}}\\
- & = & a^{2}\left(s\right)\left(1-\frac{1}{a\left(s\right)}\right)\\
- & = & a\left(s\right)\left(a\left(s\right)-1\right)\\
+sig & = & sig\left(s\right)\\
+sig & = & \frac{1}{1+e^{-s}}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+\begin_inset Formula $sig'\left(s\right)$
+\end_inset
+
+ ...
+ the derivation of the sigmoid function:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+sig' & = & sig'\left(s\right)\\
+ & = & \frac{e^{-s}}{\left(1+e^{-s}\right)^{2}}\\
+ & = & \frac{1+e^{-s}-1}{\left(1+e^{-s}\right)^{2}}\\
+ & = & \frac{1+e^{-s}}{\left(1+e^{-s}\right)^{2}}-\frac{1}{\left(1+e^{-s}\right)^{2}}\\
+ & = & sig-sig^{2}\\
+ & = & \left(1-sig\right)sig
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+\begin_inset Formula $a\left(s\right)$
+\end_inset
+
+ ...
+ activation function:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+a & = & a\left(s\right)\\
+ & = & min+\frac{rng}{1+e^{-s}}\\
+ & = & min+rng\,sig\\
+sig & = & \frac{a-min}{rng}\\
+\mathbf{} & = & \frac{a-min}{max-min}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+\begin_inset Formula $a'\left(s\right)$
+\end_inset
+
+ ...
+ the derivation of the activation function:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+a' & = & a'\left(s\right)\\
+ & = & rng\,sig'\\
+ & = & rng\,\left(1-sig\right)sig\\
+ & = & rng\,\left(1-\frac{a-min}{rng}\right)\frac{a-min}{rng}\\
+ & = & \left(a-min\right)\,\left(1-\frac{a-min}{rng}\right)\\
+ & = & \left(a-min\right)\,\left(\frac{rng-\left(a-min\right)}{rng}\right)\\
+ & = & \frac{\left(a-min\right)}{rng}\,\left(rng-\left(a-min\right)\right)\\
+ & = & \frac{\left(a-min\right)\left(max-a\right)}{max-min}\\
+ & = & \frac{\left(max-a\right)\left(a-min\right)}{max-min}\\
+ & = & \frac{\left(a-max\right)\left(min-a\right)}{max-min}
 \end{eqnarray*}
 
 \end_inset
@@ -330,7 +530,7 @@ Teacher Vector
 \begin{eqnarray*}
 t & = & \begin{pmatrix}t_{1}\\
 \vdots\\
-t_{N_{L}}
+t_{\left(_{L}N\right)}
 \end{pmatrix}
 \end{eqnarray*}
 
@@ -342,9 +542,9 @@ t_{N_{L}}
 \begin_layout Standard
 \begin_inset Formula 
 \begin{eqnarray*}
-E^{L} & = & \frac{1}{2}\left(t-o^{L}\right)^{t}\left(t-o^{L}\right)\\
- & = & \frac{1}{2}\left(t^{t}t+\left(o^{L}\right)^{T}\left(o^{L}\right)-2t^{t}o^{L}\right)\\
- & = & \frac{1}{2}\left(\left|t\right|^{2}+\left|o^{L}\right|^{2}\right)-t^{t}o^{L}
+_{L}E & = & \frac{1}{2}\left(t-_{L}o\right)^{\dagger}\left(t-_{L}o\right)\\
+ & = & \frac{1}{2}\left(t^{\dagger}t+_{L}o^{\dagger}{}_{L}o-2t^{\dagger}\,_{L}o\right)\\
+ & = & \frac{1}{2}\left(\left|t\right|^{2}+\left|_{L}o\right|^{2}\right)-t^{\dagger}\,_{L}o
 \end{eqnarray*}
 
 \end_inset
@@ -355,9 +555,9 @@ E^{L} & = & \frac{1}{2}\left(t-o^{L}\right)^{t}\left(t-o^{L}\right)\\
 \begin_layout Standard
 \begin_inset Formula 
 \begin{eqnarray*}
-\frac{\partial E^{L}}{\partial o^{L}} & = & \frac{1}{2}\left(\left(-o^{L}\right)^{t}\left(t-o^{L}\right)+\left(t-o^{L}\right)^{t}\left(-o^{L}\right)\right)\\
- & = & \left(-o^{L}\right)^{t}\left(t-o^{L}\right)\\
- & = & \left(o^{L}\right){}^{t}\left(o^{L}-t\right)
+\frac{\partial_{L}E}{\partial_{L}o} & = & \frac{1}{2}\left(\left(-_{L}1\right)^{\dagger}\left(t-_{L}o\right)+\left(t-_{L}o\right)^{\dagger}\left(-_{L}1\right)\right)\\
+ & = & -_{L}1\left(t-_{L}o\right)\\
+ & = & _{L}o-t
 \end{eqnarray*}
 
 \end_inset
@@ -368,9 +568,9 @@ E^{L} & = & \frac{1}{2}\left(t-o^{L}\right)^{t}\left(t-o^{L}\right)\\
 \begin_layout Standard
 \begin_inset Formula 
 \begin{eqnarray*}
-s_{n}^{l+1} & = & _{l}w_{n}\,o^{l}\\
-\frac{\partial s_{n}^{l+1}}{\partial_{l}w_{n}} & = & o^{l}\\
-\frac{\partial s_{n}^{l+1}}{\partial o^{l}} & = & _{l}w_{n}
+_{L}o & = & a\left(_{L}s\right)=_{L}a\\
+_{L}s & = & _{\left(L-1\right)}w\,_{\left(L-1\right)}a\\
+\partial_{_{\left(L-1\right)}w_{t}^{f}}\,_{L}s & = & _{\left(L-1\right)}a
 \end{eqnarray*}
 
 \end_inset

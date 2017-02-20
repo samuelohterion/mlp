@@ -2,208 +2,31 @@
 <html>
 	<head>
 		<style>
+			canvas {
+
+				background-color : #f0e0d0;
+			}
 		</style>
-		<title>
-			mlp logical
-		</title>
-		<script src="arr.js" type="text/javascript">
-		</script>
-	</script>
+		<title>mlp logical</title>
+		<script src="arr.js" type="text/javascript"></script>
+		<script src="mlp.js" type="text/javascript"></script>
 	</head>
 	<body>
+
+		<p id='error'>
+			error:
+		</p>
+
+		<canvas id="myCanvas" width="640" height="400" style="border : 1px solid #d3d3d3; position:relative; width : 100%; height:95%">
+<!--		<canvas id="myCanvas" width="640" height="400" style="border:1px solid #d3d3d3;">-->
+
+			Your browser does not support the HTML5 canvas tag.
+		</canvas>
+
 		<script type="text/javascript">
 
-			function pr ( p_text ) { console.log ( p_text ); }
-
-			function all0 ( pFct_fct, pI_len, pA_dst ) { for ( var i = 0; i < pI_len; ++i )  pA_dst[ i ] = pFct_fct( pA_dst[ i ] ); }
-
-			function all1 ( pFct_fct, pI_len, pA_dst, pA_src ) { for ( var i = 0; i < pI_len; ++i ) pA_dst[ i ] = pFct_fct( pA_dst[ i ], pA_src[ i ] ); }
-
-			function all2 ( pFct_fct, pI_len, pA_dst, pA_src1, pA_src2 ) { for ( var i = 0; i < pI_len; ++i )  pA_dst[ i ] = pFct_fct( pA_dst[ i ], pA_src1[ i ], pA_src2[ i ] ); }
-
-			function cum1 ( pFct_fct, pI_len, pA_src ) { var dst = 0; for ( var i = 0; i < pI_len; ++i ) dst = pFct_fct( dst, pA_src[ i ] ); return dst; }
-
-			function cum2 ( pFct_fct, pI_len, pA_src1, pA_src2 ) { var dst = 0; for ( var i = 0; i < pI_len; ++i ) dst = pFct_fct( dst, pA_src1[ i ], pA_src2[ i ] ); return dst; }
-
-			function set ( a, b ) { return b }
-
-			function add ( a, b, c ) { return b + c }
-
-			function cumProd ( a, b, c ) { return a += ( b * c ); }
-
-			function sub ( a, b, c ) { return b - c }
-
-			function mul ( a, b, c ) { return b * c }
-
-			function cpy ( pA_dst, pA_src, pI_len = pA_src.length ) { all1 ( set, pI_len, pA_dst, pA_src ) }
-
-			function sp ( pA_src1, pA_src2 ) { return cum2( cumProd, pA_src1.length, pA_src1, pA_src2 ); }
-
-			function vec ( p_fct, p_rows, p_arg1, p_arg2 ) {
-
-				var
-				rt = [ ];
-
-				for ( var r = 0; r < p_rows; ++r )
-
-					rt.push ( p_fct( p_arg1, p_arg2 ) );
-
-				return rt;
-			}
-
-			function mat ( p_fct, p_rows, p_cols, p_arg1, p_arg2 ) {
-
-				var
-				rt = [ ];
-
-				for ( var r = 0; r < p_rows; ++r ) {
-
-					rt.push ( [ ] );
-
-					for ( var c = 0; c < p_cols; ++c ) {
-
-						rt[ r ].push ( p_fct( p_arg1, p_arg2 ) );
-					}
-				}
-
-				return rt;
-			}
-
-//			function nop ( ) { }
-
-//			function rnd ( pD_min = -1, pD_max = 1 ) { var rng = pD_max - pD_min; return pD_min + rng * Math.random( ); }
-
-			function MLP ( pAI_sizes = [ 2, 3, 1 ], pD_min = 0, pD_max = 1, pD_eta = .1 ) {
-
-				this.szs   = [ ];
-				this.min   = 0;
-				this.max   = 0;
-				this.rng   = 0;
-				this.alpha = 0;
-				this.beta  = 0;
-				this.gamma = 0;
-				this.eta   = 0;
-				this.t = [ ];
-				this.o = [ ];
-				this.d = [ ];
-				this.n = [ ];
-				this.w = [ ];
-
-				var
-				dis = this,
-				create = function(  pAI_sizes = [ 2, 3, 1 ], pD_min = 0, pD_max = 1, pD_eta = .1 ) {
-
-					dis.szs   = pAI_sizes.slice( 0 );
-					dis.min   = pD_min;
-					dis.max   = pD_max;
-					dis.rng   = dis.max - dis.min;
-					dis.alpha = -1. / dis.rng;
-					dis.beta  = dis.min + dis.max;
-					dis.gamma = dis.min * dis.max;
-					dis.eta   = pD_eta;
-
-					dis.t = [ ];
-					dis.o = [ ];
-					dis.d = [ ];
-					dis.n = [ ];
-					dis.w = [ ];
-
-					var
-					one  = function ( i ) { return 1; },
-					zero = function ( i ) { return 0; },
-					rnd  = function ( i ) { return dis.min + dis.rng * Math.random( ); },
-					l    = 0;
-
-//					p_this.o.push ( vec ( set, p_this.szs[ 0 ] + 1, 1, 1 ) );
-					dis.o.push ( arr ( [ dis.szs[ 0 ] ], one ) );
-//					p_this.d.push ( vec ( nop, 0, 0 ) );
-					dis.d.push ( arr ( [ 0 ], zero ) );
-//					p_this.n.push ( vec ( nop, 0, 0 ) );
-					dis.n.push ( arr ( [ 0 ], zero ) );
-
-					while ( ++l < dis.szs.length - 1 ) {
-
-						dis.o.push ( arr ( [ dis.szs[ l ] + 1 ], one ) );
-						dis.d.push ( arr ( [ dis.szs[ l ] + 1 ], zero ) );
-						dis.n.push ( arr ( [ dis.szs[ l ] + 1 ], zero ) );
-					}
-
-					dis.t = arr ( [ dis.szs[ l ] ], zero );
-					dis.o.push ( arr ( [ dis.szs[ l ] ], one ) );
-					dis.d.push ( arr ( [ dis.szs[ l ] ], zero ) );
-					dis.n.push ( arr ( [ dis.szs[ l ] ], zero ) );
-
-					l = -1;
-
-					while ( ++l < dis.szs.length - 1 ) {
-
-//						dis.w.push ( mat ( rnd, dis.szs[ l + 1 ], dis.szs[ l ] + 1, dis.min, dis.max ) );
-						dis.w.push ( arr ( [ dis.szs[ l + 1 ], dis.szs[ l ] + 1 ], rnd ) );
-					}
-				}
-
-				var
-				__actFct = function ( pD_n ) {
-
-					return dis.rng / ( 1. + Math.exp( -pD_n ) ) + dis.min;
-				},
-
-				__diffActFct = function ( pD_n ) {
-
-					return dis.alpha * ( ( pD_n  - dis.beta ) * pD_n + dis.gamma );
-				},
-
-				__delta_x_DiffActFct = function ( pI_layerId, pI_neuronId ) {
-
-					var
-					o_ = dis.o[ pI_layerId ][ pI_neuronId ];
-
-					if( pI_layerId == ( dis.o.size( ) - 1 ) ) {
-
-						return dis.__diffActFct( o_ ) * ( dis.t[ pI_neuronId ] - o_ );
-					}
-
-					var
-					d_ = 0.;
-
-					for( var nTo = 0; nTo < dis.d[ pI_layerId + 1 ].length; ++nTo ) {
-
-						d_ += dis.w[ pI_layerId ][ nTo ][ pI_neuronId ] * dis.d[ pI_layerId + 1 ][ nTo ];
-					}
-
-					return dis.__diffActFct( o_ ) * d_;
-				};
-
-				this.remember = function ( pAD_pattern ) {
-
-					cpy ( this.o[ 0 ], pAD_pattern );
-
-					var
-					lf = 0,
-					lt = 1;
-
-					while ( lt < this.szs.length ) {
-
-						for ( var nt = 0; nt < this.szs[ lt ]; ++nt ) {
-
-							this.n[ lt ][ nt ] = sp( this.o[ lf ], this.w[ lf ][ nt ] );
-						}
-
-						dis.o[ lt ][ nt ] = __actFct( dis.n[ lt ][ nt ] );
-
-						lf = lt++;
-					}
-
-					return dis.o[ dis.o.length - 1 ];
-				}
-
-				create ( pAI_sizes, pD_min, pD_max, pD_eta );
-			}
-
 			var
-			mlp = new MLP ( [ 2, 4, 1 ], 0, 1, .05 );
-
-			pr ( mlp );
+			mlp = new MLP ( [ 2, 3, 1 ], 0, 1, .25 );
 
 			var
 			p = [
@@ -213,36 +36,77 @@
 				[ 1, 1 ]
 			],
 			t = [
-				[ 0 ],
-				[ 0 ],
 				[ 1 ],
-				[ 0 ]
-			],
-			y = [
 				[ 0 ],
 				[ 0 ],
-				[ 0 ],
-				[ 0 ]
-			],
-			e = [
-				[ 0 ],
-				[ 0 ],
-				[ 0 ],
-				[ 0 ]
+				[ 1 ]
 			];
 
-			for ( var i = 0; i < p.length; ++i ) {
+			var
+			c   = document.getElementById ( "myCanvas" ),
+			ctx = c.getContext ( "2d" ),
+			col = [ "red", "yellow", "green", "blue", "black" ],
+			loop = 0,
+			paintGrid = function ( ) {
 
-				y[ i ] = mlp.remember( p[ i ] );
+				var
+				exp_ = 1,
+				f_ = 50 / Math.log( 10 );
 
-				all2 ( sub, e[ i ].length, e[ i ], t[ i ], y[ i ] );
+				for ( var j = 0; j < 9; ++ j ) {
+
+					ctx.beginPath ( );
+					ctx.moveTo( 10,  10 - Math.log( exp_ ) * f_ );
+					ctx.lineTo( 630, 10 - Math.log( exp_ ) * f_ );
+					ctx.strokeStyle = "gray";
+					ctx.stroke( );
+					exp_ *= .1;
+				}
+
+			},
+			paintErr = function ( ) {
+
+				var
+				e_ = mlp.rms ( ),
+				f_ = 50 / Math.log( 10 );
+
+				document.getElementById( "error" ).innerHTML = ( "E = " + e_ );
+
+				ctx.beginPath ( );
+				ctx.moveTo ( 10,  10 - Math.log( e_ ) * f_ );
+				ctx.lineTo ( 630, 10 - Math.log( e_ ) * f_ );
+				ctx.strokeStyle = col[ 4 ];
+				ctx.stroke ( );
+			},
+			doLoops = function ( pI_loops ) {
+
+				for ( var l = 0; l < pI_loops; ++ l ) {
+
+					var
+					i = parseInt( 4 * Math.random ( ) );
+
+					mlp.remember( p[ i ] );
+					mlp.teach ( t[ i ] );
+				}
+
+				loop += pI_loops;
+			},
+			timer = function ( ) {
+
+				requestAnimationFrame( timer );
+
+				paintGrid ( );
+
+				paintErr ( );
+
+				doLoops ( 100 );
+
+				if ( 1e6 < loops ) loops = 0;
 			}
 
-			pr ( p );
-			pr ( y );
-			pr ( t );
-			pr ( e );
+			timer ( );
 
 		</script>
+
 	</body>
 </html>
