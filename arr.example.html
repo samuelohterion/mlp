@@ -13,55 +13,7 @@
 
 		</title>
 
-		<script type="text/javascript">
-
-			function arr ( pI_size, pFct_fct = cst ( 0 ), r = [ ] ) {
-
-				for ( var i = 0; i < pI_size; ++ i )
-
-					r[ i ] = pFct_fct ( i );
-
-				return r;
-			}
-
-			function seq ( pI_begin, pI_end, pFct_fct = add ( 0 ), r = [ ] ) {
-
-				for ( var i = pI_begin; i < pI_end; ++ i )
-
-					r[ i - pI_begin ] = pFct_fct ( i );
-
-				return r;
-			}
-
-			function fun ( pFct_fct, pA_src, pA_dst = [ ] ) {
-
-				for ( var i = 0; i < pA_src.length; ++ i )
-
-					pA_dst[ i ] = pFct_fct ( pA_src[ i ] );
-
-				return pA_dst;
-			}
-
-			function rel ( pFct_fct, pA_src1, pA_src2, pA_dst = [ ] ) {
-
-				for ( var i = 0; i < pA_src1.length; ++ i )
-
-					pA_dst[ i ] = pFct_fct( pA_src1[ i ], pA_src2[ i ] );
-
-				return pA_dst;
-			}
-
-			function cum ( pFct_fct, pA_src, r = pA_src[ 0 ] ) {
-
-				var
-				i = 0;
-
-				while ( ++ i < pA_src.length )
-
-					r = pFct_fct( r, pA_src[ i ] );
-
-				return r;
-			}
+		<script src="arr.js" type="text/javascript">
 
 		</script>
 
@@ -71,52 +23,7 @@
 
 		<script type="text/javascript">
 
-			function cst ( p_val ) {
-
-				return function ( i ) {
-
-					return p_val;
-				};
-			}
-
-			function add ( p_val ) {
-
-				return function ( i ) {
-
-					return p_val + i;
-				};
-			}
-
-			function pol ( pA_coeff ) {
-
-				return function ( x ) {
-
-					var
-					r = 0,
-					e = -1,
-					p = 1;
-
-					while ( ++ e < pA_coeff.length ) {
-
-						r += pA_coeff[ e ] * p;
-						p *= x;
-					}
-
-					return r;
-				};
-			}
-
 			function pr ( p_text ) { console.log ( p_text ); }
-
-			function sSet ( a ) { return a; }
-
-			function sSqr ( a ) { return a * a; }
-
-			function rMul ( a, b ) { return a * b; }
-
-			function rAdd ( a, b ) { return a + b; }
-
-			function round ( a, b = 2 ) { return Math.pow( 10, -b ) * Math.round ( a * Math.pow ( 10, b ) ); }
 
 			var
 			u  = arr ( 1e6, add ( 0 ) ),
@@ -174,7 +81,7 @@
 				pr ( w );
 
 				// factorial of 5
-				pr ( cum ( rMul, seq( 5, add ( 1 ) ) ) );
+				pr ( cum ( rMul, arr( 5, add ( 1 ) ) ) );
 
 				// sum of first 5 squares
 				pr ( cum ( rAdd, fun( sSqr, arr ( 5, add ( 1 ) ) ) ) );
@@ -227,30 +134,27 @@
 			arr ( 1e1, pol ( [ 5, 1 ] ), w );
 			pr ( w );
 
-
-			seq( -100, +101, pol ( [ 0, .01 ] ), w );
+			w = seq( -100, +101, pol ( [ 0, .01 ] ) );
 			pr ( w );
 
-			w = fun ( function ( x ) { return Math.cos ( x ); }, seq( -314, +314, pol ( [ 0, .02 ] ) ) );
+			w = fun ( function ( x ) { return Math.cos ( x ); }, seq( -314, +315, pol ( [ 0, .02 ] ) ) );
 			pr ( w );
 
 			var
-			m = arr (
-				4,
-				function ( x ) {
-
-					return arr (
-
-						3,
-						function ( y ) {
-
-							return ( x - 1 ) * ( y + 1 );
-						}
-					)
-				}
-			);
+			m = seq ( -314, +315, function ( x ) {
+				return seq ( -314, +315, function ( y ) {
+					return Math.cos ( .01 * x ) * Math.sin ( .01 * y ); } ) } );
 
 			pr ( m );
+
+			var
+			o = arr ( 10, function ( x ) {
+				return arr ( 10, function ( y ) {
+					return parseInt ( 100 * Math.random ( ) - 50 ); } ) } );
+
+			var
+			x     = arr ( 3, add ( 1 ) ),
+			meanX = cum ( rAdd, x ) / x.length;
 
 		</script>
 
