@@ -98,8 +98,12 @@ function sSet ( a ) { return a; }
 
 function sSqr ( a ) { return a * a; }
 
+function rDiv ( a, b ) { return a / b; }
+
 function rMul ( a, b ) { return a * b; }
 
 function rAdd ( a, b ) { return a + b; }
+
+function rSub ( a, b ) { return a - b; }
 
 function round ( a, b = 2 ) { return Math.pow( 10, -b ) * Math.round ( a * Math.pow ( 10, b ) ); }

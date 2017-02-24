@@ -17,7 +17,7 @@
 			error:
 		</p>
 
-		<canvas id="myCanvas" width="640" height="400" style="border : 1px solid #d3d3d3; position:relative; width : 100%; height:95%">
+		<canvas id="myCanvas" width="640" height="400" style="border : 1px solid #123456; position:relative; width:100%; height:93%">
 <!--		<canvas id="myCanvas" width="640" height="400" style="border:1px solid #d3d3d3;">-->
 
 			Your browser does not support the HTML5 canvas tag.
@@ -26,27 +26,45 @@
 		<script type="text/javascript">
 
 			var
-			mlp = new MLP ( [ 2, 3, 1 ], 0, 1, .25 );
+			mlp = new MLP ( [ 3, 4, 8 ], 0, 1, .5 );
 
 			var
 			p = [
-				[ 0, 0 ],
-				[ 0, 1 ],
-				[ 1, 0 ],
-				[ 1, 1 ]
+				[ 0, 0, 0 ],
+				[ 1, 0, 0 ],
+				[ 0, 1, 0 ],
+				[ 1, 1, 0 ],
+				[ 0, 0, 1 ],
+				[ 1, 0, 1 ],
+				[ 0, 1, 1 ],
+				[ 1, 1, 1 ]
 			],
 			t = [
-				[ 1 ],
-				[ 0 ],
-				[ 0 ],
-				[ 1 ]
-			];
+				[ 1, 0, 0, 0, 0, 0, 0, 0 ],
+				[ 0, 1, 0, 0, 0, 0, 0, 0 ],
+				[ 0, 0, 1, 0, 0, 0, 0, 0 ],
+				[ 0, 0, 0, 1, 0, 0, 0, 0 ],
+				[ 0, 0, 0, 0, 1, 0, 0, 0 ],
+				[ 0, 0, 0, 0, 0, 1, 0, 0 ],
+				[ 0, 0, 0, 0, 0, 0, 1, 0 ],
+				[ 0, 0, 0, 0, 0, 0, 0, 1 ]
+			],
+			currentPatternId = 0;
 
 			var
-			c   = document.getElementById ( "myCanvas" ),
-			ctx = c.getContext ( "2d" ),
-			col = [ "red", "yellow", "green", "blue", "black" ],
+			c    = document.getElementById ( "myCanvas" ),
+			ctx  = c.getContext ( "2d" ),
+			col  = [ "#000000", "#0000ff", "#00ff00", "#00ffff", "#ff0000", "#ff00ff",  "#ffff00",  "#ffffff", "black" ],
 			loop = 0,
+			grd  = ctx.createLinearGradient( 0, 0, 0, 400 );
+			grd.addColorStop( 0, "#ffffff" );
+			grd.addColorStop( 1, "#000000" );
+
+			// Fill with gradient
+			ctx.fillStyle = grd;
+			ctx.fillRect( 10, 10, 620, 390 );
+
+			var
 			paintGrid = function ( ) {
 
 				var
@@ -55,9 +73,12 @@
 
 				for ( var j = 0; j < 9; ++ j ) {
 
+					var
+					y = 10 - Math.log( exp_ ) * f_;
+
 					ctx.beginPath ( );
-					ctx.moveTo( 10,  10 - Math.log( exp_ ) * f_ );
-					ctx.lineTo( 630, 10 - Math.log( exp_ ) * f_ );
+					ctx.moveTo( 10, y );
+					ctx.lineTo( 630, y );
 					ctx.strokeStyle = "gray";
 					ctx.stroke( );
 					exp_ *= .1;
@@ -68,25 +89,26 @@
 
 				var
 				e_ = mlp.rms ( ),
-				f_ = 50 / Math.log( 10 );
+				f_ = 50 / Math.log( 10 ),
+				y  = 10 - Math.log( e_ ) * f_;
 
-				document.getElementById( "error" ).innerHTML = ( "E = " + e_ );
+				document.getElementById( "error" ).innerHTML = ( "Loop: " + loop + "\tRMS: " + e_ );
 
 				ctx.beginPath ( );
-				ctx.moveTo ( 10,  10 - Math.log( e_ ) * f_ );
-				ctx.lineTo ( 630, 10 - Math.log( e_ ) * f_ );
-				ctx.strokeStyle = col[ 4 ];
+				ctx.moveTo ( 9  + ( .0001 * loop ) % 620, y );
+				ctx.lineTo ( 10 + ( .0001 * loop ) % 620, y );
+				ctx.strokeStyle = col[ currentPatternId ];
 				ctx.stroke ( );
 			},
+
 			doLoops = function ( pI_loops ) {
 
 				for ( var l = 0; l < pI_loops; ++ l ) {
 
-					var
-					i = parseInt( 4 * Math.random ( ) );
+					currentPatternId = parseInt( 8 * Math.random ( ) );
 
-					mlp.remember( p[ i ] );
-					mlp.teach ( t[ i ] );
+					mlp.remember( p[ currentPatternId ] );
+					mlp.teach ( t[ currentPatternId ] );
 				}
 
 				loop += pI_loops;
@@ -99,14 +121,14 @@
 
 				paintErr ( );
 
-				doLoops ( 100 );
+				doLoops ( 10000 );
 
-				if ( 1e6 < loops ) loops = 0;
+				//if ( 1e6 < loop ) loop = 0;
 			}
 
 			timer ( );
 
-		</script>
+		</script>s
 
 	</body>
 </html>

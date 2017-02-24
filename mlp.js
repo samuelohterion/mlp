@@ -1,23 +1,3 @@
-function set ( a, b ) { a = b }
-
-function add ( a, b, c ) { a = b + c; }
-
-function sub ( a, b, c ) { a = b - c; }
-
-function mul ( a, b, c ) { a = b * c; }
-
-function div ( a, b, c ) { a = b / c; }
-
-function cumMul ( a, b, c ) { return a += ( b * c ); }
-
-function cpy ( pA_dst, pA_src, pI_len = pA_src.length ) { all1 ( set, pI_len, pA_dst, pA_src ) }
-
-function sp ( pA_src1, pA_src2 ) { return cum2( cumMul, pA_src1.length, pA_src1, pA_src2 ); }
-
-function mns ( pA_src1, pA_src2 ) { return arr ( sub, pA_src1.length, pA_src1, pA_src2 ); }
-
-function pls ( pA_src1, pA_src2 ) { return arr ( add, pA_src1.length, pA_src1, pA_src2 ); }
-
 function MLP ( pAI_sizes = [ 2, 3, 1 ], pD_min = 0, pD_max = 1, pD_eta = .1 ) {
 
 	this.szs   = [ ];
@@ -54,29 +34,34 @@ function MLP ( pAI_sizes = [ 2, 3, 1 ], pD_min = 0, pD_max = 1, pD_eta = .1 ) {
 		one  = function ( i ) { return 1; },
 		zero = function ( i ) { return 0; },
 		rnd  = function ( i ) { return dis.min + dis.rng * Math.random ( ); },
-		l    = 0;
+		l    = 0,
+		szs = dis.szs[ l ];
 
-		dis.o.push ( arr ( [ dis.szs[ 0 ] ], one ) );
-		dis.d.push ( arr ( [ 0 ], zero ) );
-		dis.n.push ( arr ( [ 0 ], zero ) );
+		dis.o.push ( arr ( szs + 1, one ) );
+		dis.d.push ( arr ( 0, zero ) );
+		dis.n.push ( arr ( 0, zero ) );
 
 		while ( ++ l < dis.szs.length - 1 ) {
 
-			dis.o.push ( arr ( [ dis.szs[ l ] + 1 ], one ) );
-			dis.d.push ( arr ( [ dis.szs[ l ] + 1 ], zero ) );
-			dis.n.push ( arr ( [ dis.szs[ l ] + 1 ], zero ) );
+			szs = dis.szs[ l ];
+
+			dis.o.push ( arr ( szs + 1, one ) );
+			dis.d.push ( arr ( szs + 1, zero ) );
+			dis.n.push ( arr ( szs + 1, zero ) );
 		}
 
-		dis.t = arr ( [ dis.szs[ l ] ], zero );
-		dis.o.push ( arr ( [ dis.szs[ l ] ], one ) );
-		dis.d.push ( arr ( [ dis.szs[ l ] ], zero ) );
-		dis.n.push ( arr ( [ dis.szs[ l ] ], zero ) );
+		szs = dis.szs[ l ];
+
+		dis.t = arr ( szs, zero );
+		dis.o.push ( arr ( szs, one ) );
+		dis.d.push ( arr ( szs, zero ) );
+		dis.n.push ( arr ( szs, zero ) );
 
 		l = -1;
 
 		while ( ++ l < dis.szs.length - 1 ) {
 
-			dis.w.push ( arr ( [ dis.szs[ l + 1 ], dis.szs[ l ] + 1 ], rnd ) );
+			dis.w.push ( arr ( dis.szs[ l + 1 ], function ( dontCareAbout ) { return arr ( dis.szs[ l ] + 1, rnd ) } ) );
 		}
 	},
 
@@ -87,7 +72,7 @@ function MLP ( pAI_sizes = [ 2, 3, 1 ], pD_min = 0, pD_max = 1, pD_eta = .1 ) {
 
 	this.remember = function ( pAD_pattern ) {
 
-		cpy ( this.o[ 0 ], pAD_pattern );
+		fun ( sSet, pAD_pattern, this.o[ 0 ] );
 
 		var
 		lf = 0,
@@ -97,7 +82,7 @@ function MLP ( pAI_sizes = [ 2, 3, 1 ], pD_min = 0, pD_max = 1, pD_eta = .1 ) {
 
 			for ( var nt = 0; nt < this.szs[ lt ]; ++ nt ) {
 
-				this.n[ lt ][ nt ] = sp( this.o[ lf ], this.w[ lf ][ nt ] );
+				this.n[ lt ][ nt ] = cum ( rAdd, rel ( rMul, this.o[ lf ], this.w[ lf ][ nt ] ) );
 
 				this.o[ lt ][ nt ] = __actFct( this.n[ lt ][ nt ] );
 			}
@@ -110,10 +95,7 @@ function MLP ( pAI_sizes = [ 2, 3, 1 ], pD_min = 0, pD_max = 1, pD_eta = .1 ) {
 
 	this.rms = function ( ) {
 
-		var
-		d_ = mns ( this.t, this.o[ this.szs.length - 1 ] );
-
-		return Math.sqrt ( sp ( d_, d_ ) / this.t.length );
+		return cum ( rAdd, fun ( sSqr, rel( rSub, this.t, this.o[ this.szs.length - 1 ] ) ) ) / this.t.length;
 	}
 
 	this.teach = function ( pA_teacher ) {
