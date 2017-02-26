@@ -41,21 +41,16 @@ function MLP ( pAI_sizes = [ 2, 3, 1 ], pD_min = 0, pD_max = 1, pD_eta = .1 ) {
 		dis.d.push ( arr ( 0, zero ) );
 		dis.n.push ( arr ( 0, zero ) );
 
-		while ( ++ l < dis.szs.length - 1 ) {
+		while ( ++ l < dis.szs.length ) {
 
 			szs = dis.szs[ l ];
 
-			dis.o.push ( arr ( szs + 1, one ) );
-			dis.d.push ( arr ( szs + 1, zero ) );
-			dis.n.push ( arr ( szs + 1, zero ) );
+			dis.o.push ( arr ( szs + ( l < dis.szs.length - 1 ), one ) );
+			dis.d.push ( arr ( szs, zero ) );
+			dis.n.push ( arr ( szs, zero ) );
 		}
 
-		szs = dis.szs[ l ];
-
 		dis.t = arr ( szs, zero );
-		dis.o.push ( arr ( szs, one ) );
-		dis.d.push ( arr ( szs, zero ) );
-		dis.n.push ( arr ( szs, zero ) );
 
 		l = -1;
 

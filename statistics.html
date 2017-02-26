@@ -1,0 +1,76 @@
+<!DOCTYPE = HTML>
+<html>
+	<head>
+		<style>
+			canvas {
+
+				background-color : #f0f8ff;
+			}
+		</style>
+		<title>
+			statistics with closures
+		</title>
+		<script src="arr.js" type="text/javascript">
+		</script>
+	</head>
+	<body>
+
+		<p id='text'>
+			text:
+		</p>
+
+		<script type="text/javascript">
+
+			function pr ( p_text ) { console.log ( p_text ); }
+
+			function dnorm ( pD_mu, pD_sigma, pD_dx ) {
+
+				return function ( x ) {
+
+					return dx * Math.exp ( - ( x - pD_mu ) * ( x - pD_mu ) / ( 2. * pD_sigma * pD_sigma ) ) / ( Math.sqrt ( 2. * Math.PI ) * pD_sigma );
+				}
+			}
+
+			function mean ( p, x ) {
+
+				return cum ( rAdd, rel ( rMul, p, x ) );
+			}
+
+			function variance ( p, x ) {
+
+				return mean ( p, fun ( sSqr, rel ( rSub, x, arr ( x.length, cst ( mn ) ) ) ) );
+			}
+
+			function sigma ( p, x ) {
+
+				return Math.sqrt ( variance ( p, x ) );
+			}
+
+			var
+			dx  = .5,
+			x   = seq ( -50, +51, pol ( [ 0, dx ] ) );
+			p   = fun ( dnorm ( Math.PI, Math.E, dx ), x ),
+			nrm = cum ( rAdd, p );
+
+			pr ( nrm );
+
+			rel ( rDiv,  p, arr( p.length, cst ( nrm ) ), p );
+
+			nrm = cum ( rAdd, p );
+
+			pr ( nrm );
+
+			var
+			mn  = mean ( p, x ),
+			vr  = variance ( p, x ),
+			sgm = sigma ( p, x );
+
+			pr ( mn );
+			pr ( vr );
+			pr ( sgm );
+
+
+		</script>
+
+	</body>
+</html>
