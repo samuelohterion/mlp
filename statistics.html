@@ -38,7 +38,7 @@
 
 			function variance ( p, x ) {
 
-				return mean ( p, fun ( sSqr, rel ( rSub, x, arr ( x.length, cst ( mn ) ) ) ) );
+				return mean ( p, fun ( sSqr, rel ( rSub, x, mean ( p, x ) ) ) );
 			}
 
 			function sigma ( p, x ) {
@@ -47,27 +47,31 @@
 			}
 
 			var
-			dx  = .5,
-			x   = seq ( -50, +51, pol ( [ 0, dx ] ) );
+			dx  = .1,
+			x   = seq ( -500, +501, pol ( [ 0, dx ] ) );
 			p   = fun ( dnorm ( Math.PI, Math.E, dx ), x ),
 			nrm = cum ( rAdd, p );
 
 			pr ( nrm );
+			pr ( mean ( p, x ) );
+			pr ( variance ( p, x ) );
+			pr ( sigma ( p, x ) );
 
-			rel ( rDiv,  p, arr( p.length, cst ( nrm ) ), p );
+			rel ( rDiv,  p, nrm, p );
 
 			nrm = cum ( rAdd, p );
 
 			pr ( nrm );
+			pr ( mean ( p, x ) );
+			pr ( variance ( p, x ) );
+			pr ( sigma ( p, x ) );
 
 			var
-			mn  = mean ( p, x ),
-			vr  = variance ( p, x ),
-			sgm = sigma ( p, x );
+			z = rel ( rDiv, rel ( rSub, x, mean ( p, x ) ), sigma ( p, x ) );
 
-			pr ( mn );
-			pr ( vr );
-			pr ( sgm );
+			pr ( mean ( p, z ) );
+			pr ( variance ( p, z ) );
+			pr ( sigma ( p, z ) );
 
 
 		</script>

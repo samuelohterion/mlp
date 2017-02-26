@@ -18,26 +18,62 @@ function seq ( pI_begin, pI_end, pFct_fct = add ( 0 ), pA_dst = [ ] ) {
 
 function fun ( pFct_fct, pA_src, pA_dst = [ ] ) {
 
-	for ( var i = 0; i < pA_src.length; ++ i )
+	if ( pA_src instanceof Array ) {
 
-		pA_dst[ i ] = pFct_fct ( pA_src[ i ] );
+		for ( var i = 0; i < pA_src.length; ++ i )
+
+			pA_dst[ i ] = pFct_fct ( pA_src[ i ] );
+	}
+	else {
+
+		for ( var i = 0; i < pA_src.length; ++ i )
+
+			pA_dst[ i ] = pFct_fct ( pA_src );
+	}
 
 	return pA_dst;
 }
 
 function rel ( pFct_fct, pA_src1, pA_src2, pA_dst = [ ] ) {
 
+	if ( pA_src1 instanceof Array && pA_src2 instanceof Array ) {
+
+		for ( var i = 0; i < pA_src1.length; ++ i )
+
+			pA_dst[ i ] = pFct_fct( pA_src1[ i ], pA_src2[ i ] );
+
+		return pA_dst;
+	}
+
+	if ( pA_src1 instanceof Array ) {
+
+		for ( var i = 0; i < pA_src1.length; ++ i )
+
+			pA_dst[ i ] = pFct_fct( pA_src1[ i ], pA_src2 );
+
+		return pA_dst;
+	}
+
+	if ( pA_src2 instanceof Array ) {
+
+		for ( var i = 0; i < pA_src1.length; ++ i )
+
+			pA_dst[ i ] = pFct_fct( pA_src1, pA_src2[ i ] );
+
+		return pA_dst;
+	}
+
 	for ( var i = 0; i < pA_src1.length; ++ i )
 
-		pA_dst[ i ] = pFct_fct( pA_src1[ i ], pA_src2[ i ] );
+		pA_dst[ i ] = pFct_fct( pA_src1, pA_src2 );
 
 	return pA_dst;
 }
 
-function cum ( pFct_fct, pA_src, s = pA_src[ 0 ] ) {
+function cum ( pFct_fct, pA_src, s = 0 ) {
 
 	var
-	i = 0;
+	i = -1;
 
 	while ( ++ i < pA_src.length )
 
@@ -45,8 +81,6 @@ function cum ( pFct_fct, pA_src, s = pA_src[ 0 ] ) {
 
 	return s;
 }
-
-
 
 // some useful functions
 
