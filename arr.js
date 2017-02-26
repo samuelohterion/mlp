@@ -64,6 +64,18 @@ function cum ( pFct_fct, pA_src, s = 0 ) {
 	return s;
 }
 
+function cum ( pFct_fct, pA_src, s = 0 ) {
+
+	var
+	i = -1;
+
+	while ( ++ i < pA_src.length )
+
+		s = pFct_fct( s, pA_src[ i ] );
+
+	return s;
+}
+
 // some useful functions
 
 function cst ( p_val ) {
@@ -84,16 +96,16 @@ function add ( p_val ) {
 
 	return function ( i ) {
 
-		return val + i;
+		return i + val;
 	};
 }
 
-function cnt ( ) {
+function int ( ) {
 
 	var
 	c = 0;
 
-	return function ( i ) { return ++ c };
+	return function ( i ) { return c += i; };
 }
 
 function pol ( pA_coeff ) {
@@ -120,7 +132,13 @@ function pol ( pA_coeff ) {
 
 function sSet ( a ) { return a; }
 
+function sSqt ( a ) { return Math.sqrt ( a ); }
+
 function sSqr ( a ) { return a * a; }
+
+function sExp ( a ) { return Math.exp ( a ); }
+
+function sLog ( a ) { return Math.log ( a ); }
 
 function rAdd ( a, b ) { return a + b; }
 
@@ -129,5 +147,7 @@ function rSub ( a, b ) { return a - b; }
 function rMul ( a, b ) { return a * b; }
 
 function rDiv ( a, b ) { return a / b; }
+
+function rPow ( a, b ) { return Math.pow ( a, b ); }
 
 function round ( a, b = 2 ) { return Math.pow( 10, -b ) * Math.round ( a * Math.pow ( 10, b ) ); }

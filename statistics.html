@@ -26,8 +26,8 @@
 			function pr ( p_text ) { console.log ( p_text ); }
 
 			var
-			dx  = .05,
-			x   = seq ( -1000, +1001, pol ( [ 0, dx ] ) );
+			dx  = .1,
+			x   = seq ( -100, +101, pol ( [ 0, dx ] ) );
 			p   = fun ( pnorm ( 1, 2, dx ), x ),
 			d   = fun ( dnorm ( 1, 2 ), x );
 
@@ -71,6 +71,28 @@
 			pr ( cum ( rAdd, rel ( rMul, fun ( rng ( -1e12, 0 ), z ), p ) ) );
 			pr ( cum ( rAdd, rel ( rMul, fun ( rng ( 0, 1e12 ), z ), p ) ) );
 			pr ( cum ( rAdd, rel ( rMul, fun ( rng ( -1e12, 0 ), z ), p ) ) + cum ( rAdd, rel ( rMul, fun ( rng ( 0, 1e12 ), z ), p ) ) );
+
+			pr ( cum ( rAdd, p ) );
+			pr ( cum ( rAdd, d ) );
+
+			var
+			i = fun ( int( ), p );
+
+			pr ( x[ cum ( rAdd, fun ( rng ( -1e22, .1 ), i ) ) ] );
+			pr ( x[ cum ( rAdd, fun ( rng ( -1e22, .9 ), i ) ) ] );
+			pr ( -x[ cum ( rAdd, fun ( rng ( -1e22, .1 ), i ) ) ] + x[ cum ( rAdd, fun ( rng ( -1e22, .9 ), i ) ) ] );
+
+			pr ( x[ cum ( rAdd, fun ( rng ( -1e22, .025 ), i ) ) ] );
+			pr ( x[ cum ( rAdd, fun ( rng ( -1e22, .975 ), i ) ) ] );
+			pr ( -x[ cum ( rAdd, fun ( rng ( -1e22, .025 ), i ) ) ] + x[ cum ( rAdd, fun ( rng ( -1e22, .975 ), i ) ) ] );
+
+			pr ( x[ cum ( rAdd, fun ( rng ( -1e22, .01 ), i ) ) ] );
+			pr ( x[ cum ( rAdd, fun ( rng ( -1e22, .99 ), i ) ) ] );
+			pr ( -x[ cum ( rAdd, fun ( rng ( -1e22, .01 ), i ) ) ] + x[ cum ( rAdd, fun ( rng ( -1e22, .99 ), i ) ) ] );
+
+			pr ( x[ cum ( rAdd, fun ( rng ( -1e22, .001 ), i ) ) ] );
+			pr ( x[ cum ( rAdd, fun ( rng ( -1e22, .999 ), i ) ) ] );
+			pr ( -x[ cum ( rAdd, fun ( rng ( -1e22, .001 ), i ) ) ] + x[ cum ( rAdd, fun ( rng ( -1e22, .999 ), i ) ) ] );
 
 		</script>
 
